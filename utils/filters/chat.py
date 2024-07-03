@@ -1,7 +1,7 @@
 from aiogram.types import *
 from aiogram.filters import BaseFilter
 
-from typing import Union
+from typing import Union, Any
     
 class ChatTypeFilter(BaseFilter):
     def __init__(self, chat_type: Union[str, list]):
@@ -19,12 +19,15 @@ class ChatTypeFilter(BaseFilter):
 
     async def __call__(self, obj) -> bool:
         if isinstance(obj, (CallbackQuery, Message)):
-            obj_type = obj.message.chat.type if isinstance(obj, CallbackQuery) else obj.chat.type
-            return obj_type in self.chat_type
+            return obj.message.chat.type if isinstance(obj, CallbackQuery) else obj.chat.type in self.chat_type
+        
         return False
 
 class ChatIdFilter(BaseFilter):
-    def __init__(self, chat_id: Union[int, list]):
+    def __init__(
+            self,
+            chat_id: Any[Union[int, list]]
+        ):
         if isinstance(chat_id, int):
             chat_id = [chat_id]  # Convert to list if it's an integer
 
@@ -32,7 +35,6 @@ class ChatIdFilter(BaseFilter):
 
     async def __call__(self, obj):
         if isinstance(obj, (CallbackQuery, Message)):
-            obj_id = obj.message.chat.id if isinstance(obj, CallbackQuery) else obj.chat.id
-            return obj_id in self.chat_id
+            return obj.message.chat.id if isinstance(obj, CallbackQuery) else obj.chat.id in self.chat_id
         
         return False
