@@ -1,7 +1,7 @@
 from aiogram.types import *
 from aiogram.filters import BaseFilter
 
-from typing import Union, Any
+from typing import Union
     
 class ChatTypeFilter(BaseFilter):
     def __init__(self, chat_type: Union[str, list]):
@@ -26,7 +26,7 @@ class ChatTypeFilter(BaseFilter):
 class ChatIdFilter(BaseFilter):
     def __init__(
             self,
-            chat_id: Any[Union[int, list]]
+            chat_id: Union[int, list]
         ):
         if isinstance(chat_id, int):
             chat_id = [chat_id]  # Convert to list if it's an integer
