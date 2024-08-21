@@ -5,6 +5,9 @@ from bot import bot, dp
 from utils.Middleware.filters.anti_spam import AntiFloodMiddleware
 from utils.Middleware.filters.chat import ChatTypeMiddleware
 
+from aiogram.filters.chat_member_updated import ChatMemberUpdatedFilter, MEMBER, KICKED
+from aiogram.types import ChatMemberUpdated
+
 from utils.database.database_manager import DatabaseManager
 
 import routers.user.message.start as start
@@ -44,13 +47,11 @@ async def load_config() -> dict:
         'interval': interval
     }
 
-
 async def on_startup():
     await database.init_db()
 
 async def on_shutdown():
     await database.close_db()
-
 
 async def config_and_init() -> None:
     """Load configurations and initialize the bot."""
@@ -60,11 +61,21 @@ async def config_and_init() -> None:
     # Добавляем обработчик сигнала клавиатуры
     signal.signal(signal.SIGINT, stop_bot)
 
-
 async def stop_bot(sig, frame):
     """Останавливаем бот."""
     await dp.stop_polling()
 
+@dp.my_chat_member(
+    ChatMemberUpdatedFilter(member_status_changed=KICKED)
+)
+async def user_blocked_bot(event: ChatMemberUpdated):
+    print(event.from_user.id)
+
+@dp.my_chat_member(
+    ChatMemberUpdatedFilter(member_status_changed=MEMBER)
+)
+async def user_unblocked_bot(event: ChatMemberUpdated):
+    print(event.from_user.id)
 
 async def init(configuration: dict) -> None:
     """Initialize the bot with the given configuration."""
@@ -83,7 +94,7 @@ async def init(configuration: dict) -> None:
     dp.shutdown.register(on_shutdown)
 
     print(f'Starting polling the bot: https://t.me/{
-          bot_info.username} \nBot information: @{bot_info.username} | ID: {bot_info.id}')
+        bot_info.username} \nBot information: @{bot_info.username} | ID: {bot_info.id}')
 
     await bot.delete_webhook()
     await dp.start_polling(bot)
