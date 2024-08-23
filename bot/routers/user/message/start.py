@@ -1,4 +1,4 @@
-from aiogram import Router, Bot
+from aiogram import Router
 
 from aiogram.types import Message
 

@@ -10,14 +10,14 @@ class IsThatText(Filter):
     def __init__(self, *my_text: str) -> None:
         self.my_text = my_text
 
-    async def __call__(self, message: Message, state: FSMContext) -> bool:       
+    async def __call__(self, message: Message) -> bool:       
         return message.text in self.my_text
     
 class IsThatTextRe(Filter):
     def __init__(self, *patterns: str) -> None:
         self.patterns = patterns
 
-    async def __call__(self, message: Message, state: FSMContext) -> bool:
+    async def __call__(self, message: Message) -> bool:
         for pattern in self.patterns:
             if re.search(pattern, message.text):
                 return True
@@ -27,7 +27,7 @@ class IsThatCall(Filter):
     def __init__(self, *my_callbacks: str) -> None:
         self.my_callbacks = my_callbacks
 
-    async def __call__(self, call: CallbackQuery, state: FSMContext) -> bool:
+    async def __call__(self, call: CallbackQuery) -> bool:
         return call.data in self.my_callbacks
 
 class IsThatCallStartWith(Filter):
