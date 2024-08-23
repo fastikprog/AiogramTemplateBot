@@ -42,6 +42,7 @@ class DatabaseManager:
                 modules={'models': ['utils.database.models']}
             )
             await Tortoise.generate_schemas()
+            print("Succes init a database")
         except aiomysql.Error as e:
             print(f"Failed to connect to the database: {e}")
             exit(1)
