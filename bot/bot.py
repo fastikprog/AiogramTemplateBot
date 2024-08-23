@@ -4,7 +4,7 @@ from aiogram.client.default import DefaultBotProperties
 
 from aiogram.utils.token import TokenValidationError
 
-from data.config import SecretConfig
+from data.config.secret_config import SecretConfig
 
 config = SecretConfig()
 
