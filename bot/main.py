@@ -6,7 +6,9 @@ from utils.Middleware.register import init_mw
 
 from utils.database.database_manager import DatabaseManager
 
-import routers.user.message.start as start
+import routers.user.message.defaults.start as start
+import routers.user.message.defaults.referal as referal
+
 from data.config.secret_config import SecretConfig
 
 config = SecretConfig()
@@ -51,7 +53,10 @@ async def stop_bot(sig, frame):
 
 async def init() -> None:
     """Initialize the bot with the given configuration."""
-    dp.include_routers(start.router)
+    dp.include_routers(
+        start.router,
+        referal.router
+    )
 
     bot_info = await bot.get_me()
 
