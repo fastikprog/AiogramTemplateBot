@@ -5,12 +5,12 @@ from aiogram.types import Message
 from aiogram.filters import Command
 from utils.Middleware.filters.database import UserExsiting
 
-from aiogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import Message
 
 from utils.database.models import User
 
 router = Router(
-    name='referal_link'
+    name='referal'
 )
 
 router.message.middleware.register(
@@ -18,7 +18,7 @@ router.message.middleware.register(
 )
 
 @router.message(
-    Command('referall_link')
+    Command('referal')
 )
 async def start(
     message: Message,

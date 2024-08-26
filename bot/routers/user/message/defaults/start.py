@@ -55,5 +55,5 @@ async def start(
             )
 
     await message.answer(
-        "👋<b>Привет!</b> Это шаблон телеграм бота от @fastikprog\nПо вопросам к нему. \n🪛 <i>Репозитория</i>: https://github.com/fastikprog/AiogramTemplateBot"
+        text='🏠 Главное меню'
     )

@@ -8,6 +8,9 @@ from utils.database.database_manager import DatabaseManager
 
 import routers.user.message.defaults.start as start
 import routers.user.message.defaults.referal as referal
+import routers.user.message.defaults.dev as dev
+
+from aiogram.types import BotCommand
 
 from data.config.secret_config import SecretConfig
 
@@ -34,8 +37,18 @@ database = DatabaseManager(
     )
 )
 
+async def set_bot_commands():
+    commands = [
+        BotCommand(command="/start", description="⭐️ Начать работу с ботом"),
+        BotCommand(command="/referal", description="👥 Реферальная программа"),
+        BotCommand(command="/dev", description="🧑‍💻 Разработчик")
+        # Добавьте другие команды по мере необходимости
+    ]
+    await bot.set_my_commands(commands)
+
 async def on_startup():
     await database.init_db()
+    await set_bot_commands()
 
 async def on_shutdown():
     await database.close_db()
@@ -55,7 +68,8 @@ async def init() -> None:
     """Initialize the bot with the given configuration."""
     dp.include_routers(
         start.router,
-        referal.router
+        referal.router,
+        dev.router
     )
 
     bot_info = await bot.get_me()
