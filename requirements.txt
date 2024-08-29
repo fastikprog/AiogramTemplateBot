@@ -1,0 +1,5 @@
+aiogram
+aiomysql
+PyMySQL
+python-dotenv
+tortoise-orm
