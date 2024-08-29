@@ -1,25 +1,57 @@
 from aiogram import Router, Bot
-from aiogram.types import Message
+from aiogram.types import Message, CallbackQuery
 from aiogram.filters import CommandStart, or_f, CommandObject
 from aiogram.utils.deep_linking import decode_payload
+from utils.Middleware.filters.database import UserExsiting
+from utils.filters.handlers import IsThatCall, IsThatText
+from loader import UserButtonsManager
 from utils.database.models import User, Referral
 from tortoise.transactions import in_transaction
 
 router = Router(name='start')
 
-@router.message(or_f(CommandStart(), CommandStart(deep_link=True)))
+router.callback_query.middleware.register(
+    UserExsiting()
+)
+
+
+@router.message(
+    or_f(
+        CommandStart(),
+        CommandStart(
+            deep_link=True
+        ),
+        IsThatText("🏠Главное меню🏠")
+    )
+)
+@router.callback_query(
+    IsThatCall('menu')
+)
 async def start(
-    message: Message,
-    command: CommandObject,
-    bot: Bot
+    message: Message | CallbackQuery,
+    bot: Bot,
+    user: User | None = None,
+    command: CommandObject | None = None,
 ) -> None:
     user_id = message.from_user.id
     username = message.from_user.username
     language_code = message.from_user.language_code
     referrer = None
 
-    args = command.args
-    
+    menu_text = '🏠 Главное меню'
+
+    if hasattr(message, 'data'):
+        message = message.message
+
+        return await message.edit_text(
+            text=menu_text,
+            reply_markup=UserButtonsManager.start_inline_button(
+                language_code=user.language_code
+            )
+        )
+
+    args = command.args if command else None
+
     default_data_user = {
         'username': username,
         'language_code': language_code
@@ -55,5 +87,14 @@ async def start(
             )
 
     await message.answer(
-        text='🏠 Главное меню'
+        text="🏠",
+        reply_markup=UserButtonsManager.one_button_keyboard(
+            ButtonText="🏠Главное меню🏠"
+        )
+    )
+    return await message.answer(
+        text=menu_text,
+        reply_markup=UserButtonsManager.start_inline_button(
+            language_code=user.language_code
+        )
     )

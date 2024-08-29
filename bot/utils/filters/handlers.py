@@ -24,11 +24,11 @@ class IsThatTextRe(Filter):
         return False
     
 class IsThatCall(Filter):
-    def __init__(self, *my_callbacks: str) -> None:
-        self.my_callbacks = my_callbacks
+    def __init__(self, *my_callback: str) -> None:
+        self.my_callback = my_callback
 
     async def __call__(self, call: CallbackQuery) -> bool:
-        return call.data in self.my_callbacks
+        return call.data in self.my_callback
 
 class IsThatCallStartWith(Filter):
     def __init__(self, my_callback: str) -> None:
