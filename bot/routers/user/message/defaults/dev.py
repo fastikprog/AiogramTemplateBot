@@ -29,22 +29,23 @@ router.callback_query.middleware.register(
 async def start(
     message: Message | CallbackQuery
 ) -> None:
-    dev_info = "👋<b>Привет!</b> Это шаблон телеграм бота от @fastikprog\nПо вопросам касательно шаблону к нему. \n🪛 <i>Репозитория</i>: https://github.com/fastikprog/AiogramTemplateBot"
+    dev_info = f"<a href='https://github.com/fastikprog/AiogramTemplateBot'>⁬⁯</a>"
 
     if hasattr(message, 'data'):
         message = message.message
 
         return await message.edit_text(
             text=dev_info,
-            reply_markup=UserButtonsManager.one_button_inline(
-                ButtonText="🏠 В меню",
-                ButtonCall="menu"
-            )
+            reply_markup=UserButtonsManager.dev_inline_button()
         )
-
+    
+    await message.answer(
+        text="🧑‍💻",
+        reply_markup=UserButtonsManager.one_button_keyboard()
+    )
     return await message.answer(
         text=dev_info,
-        reply_markup=UserButtonsManager.one_button_keyboard(
-            ButtonText="🏠Главное меню🏠"
+        reply_markup=UserButtonsManager.dev_inline_button(
+            back_button=False
         )
     )

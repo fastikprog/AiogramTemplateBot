@@ -33,10 +33,10 @@ class UserButtons(
         ]
 
         return InlineKeyboardMarkup(inline_keyboard=button)
-    
+
     def one_button_keyboard(
         self,
-        ButtonText: str = "❌ Закрыть"
+        ButtonText: str = "🏠Главное меню🏠"
     ) -> ReplyKeyboardMarkup:
         button = [
             [
@@ -47,7 +47,6 @@ class UserButtons(
         ]
 
         return ReplyKeyboardMarkup(keyboard=button, resize_keyboard=True)
-
 
     def start_inline_button(
         self,
@@ -124,3 +123,54 @@ class UserButtons(
         return InlineKeyboardMarkup(
             inline_keyboard=buttons
         )
+
+    def dev_inline_button(
+        self,
+        back_button: bool = None
+    ) -> InlineKeyboardMarkup:
+        buttons = [
+            [
+                InlineKeyboardButton(
+                    text="🧑‍💻 Разработчик",
+                    url="tg://user?id=5549357927"
+                )
+            ],
+            [
+                InlineKeyboardButton(
+                    text="🌟 История изменения",
+                    url="https://github.com/fastikprog/AiogramTemplateBot/commits/main/"
+                ),
+                InlineKeyboardButton(
+                    text="⚙️ Использовать шаблон",
+                    url="https://github.com/new?template_name=AiogramTemplateBot&template_owner=fastikprog"
+                )
+            ],
+            [
+                InlineKeyboardButton(
+                    text="🗄 Репозитория",
+                    url="https://github.com/fastikprog/AiogramTemplateBot"
+                )
+            ]
+        ]
+
+        if back_button is not None:
+            if back_button:
+                buttons.append(
+                    [
+                        InlineKeyboardButton(
+                            text="🏠 В меню",
+                            callback_data="menu"
+                        )
+                    ]
+                )
+        elif self._default_back_only:
+            buttons.append(
+                [
+                    InlineKeyboardButton(
+                        text="🏠 В меню",
+                        callback_data="menu"
+                    )
+                ]
+            )
+
+        return InlineKeyboardMarkup(inline_keyboard=buttons)

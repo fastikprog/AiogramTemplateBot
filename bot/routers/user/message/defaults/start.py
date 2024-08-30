@@ -88,9 +88,7 @@ async def start(
 
     await message.answer(
         text="🏠",
-        reply_markup=UserButtonsManager.one_button_keyboard(
-            ButtonText="🏠Главное меню🏠"
-        )
+        reply_markup=UserButtonsManager.one_button_keyboard()
     )
     return await message.answer(
         text=menu_text,
