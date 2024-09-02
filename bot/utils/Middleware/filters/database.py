@@ -22,8 +22,7 @@ class UserExsiting(BaseMiddleware):
         )
         if not user:
             return await event.answer(
-                text='💉 Напишите /start',
-                show_alert=True
+                text='💉 Напишите /start'
             )
 
         data['user'] = user
